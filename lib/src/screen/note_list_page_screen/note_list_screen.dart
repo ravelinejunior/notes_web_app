@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:notes_web_app/src/domain/provider/note_provider.dart';
 import 'package:notes_web_app/src/screen/note_list_page_screen/components/note_detail_page_screen.dart';
 import 'package:notes_web_app/src/screen/note_list_page_screen/components/note_edit_page_screen.dart';
+import 'package:notes_web_app/src/utils/pdf_helper.dart';
+import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 
 class NoteListScreen extends StatelessWidget {

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:notes_web_app/src/domain/model/note.dart';
 import 'package:notes_web_app/src/domain/provider/note_provider.dart';
+import 'package:notes_web_app/src/utils/pdf_helper.dart';
+import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 import 'note_edit_page_screen.dart';
 
@@ -30,6 +32,13 @@ class NoteDetailPageScreen extends StatelessWidget {
             onPressed: () {
               Provider.of<NoteProvider>(context, listen: false).delete(note);
               Navigator.of(context).pop();
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.print),
+            onPressed: () async {
+              final pdfData = await generateSinglePdf(note);
+              await Printing.layoutPdf(onLayout: (format) => pdfData);
             },
           ),
         ],

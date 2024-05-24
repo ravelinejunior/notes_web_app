@@ -4,12 +4,10 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i4;
-import 'dart:ui' as _i6;
 
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:notes_web_app/src/data/services/notes_api_service.dart' as _i3;
 import 'package:notes_web_app/src/domain/model/note.dart' as _i2;
-import 'package:notes_web_app/src/domain/provider/note_provider.dart' as _i5;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -102,114 +100,4 @@ class MockNotesApiService extends _i1.Mock implements _i3.NotesApiService {
         returnValue: _i4.Future<void>.value(),
         returnValueForMissingStub: _i4.Future<void>.value(),
       ) as _i4.Future<void>);
-}
-
-/// A class which mocks [NoteProvider].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockNoteProvider extends _i1.Mock implements _i5.NoteProvider {
-  MockNoteProvider() {
-    _i1.throwOnMissingStub(this);
-  }
-
-  @override
-  List<_i2.Note> get notes => (super.noSuchMethod(
-        Invocation.getter(#notes),
-        returnValue: <_i2.Note>[],
-      ) as List<_i2.Note>);
-
-  @override
-  bool get isLoading => (super.noSuchMethod(
-        Invocation.getter(#isLoading),
-        returnValue: false,
-      ) as bool);
-
-  @override
-  bool get hasListeners => (super.noSuchMethod(
-        Invocation.getter(#hasListeners),
-        returnValue: false,
-      ) as bool);
-
-  @override
-  _i4.Future<void> fetchNotes() => (super.noSuchMethod(
-        Invocation.method(
-          #fetchNotes,
-          [],
-        ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
-
-  @override
-  _i4.Future<void> add(_i2.Note? note) => (super.noSuchMethod(
-        Invocation.method(
-          #add,
-          [note],
-        ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
-
-  @override
-  _i4.Future<void> update(
-    _i2.Note? oldNote,
-    _i2.Note? newNote,
-  ) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #update,
-          [
-            oldNote,
-            newNote,
-          ],
-        ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
-
-  @override
-  _i4.Future<void> delete(_i2.Note? note) => (super.noSuchMethod(
-        Invocation.method(
-          #delete,
-          [note],
-        ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
-
-  @override
-  void addListener(_i6.VoidCallback? listener) => super.noSuchMethod(
-        Invocation.method(
-          #addListener,
-          [listener],
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void removeListener(_i6.VoidCallback? listener) => super.noSuchMethod(
-        Invocation.method(
-          #removeListener,
-          [listener],
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void dispose() => super.noSuchMethod(
-        Invocation.method(
-          #dispose,
-          [],
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void notifyListeners() => super.noSuchMethod(
-        Invocation.method(
-          #notifyListeners,
-          [],
-        ),
-        returnValueForMissingStub: null,
-      );
 }
