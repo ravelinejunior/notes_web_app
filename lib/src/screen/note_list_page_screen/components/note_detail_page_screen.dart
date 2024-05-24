@@ -45,7 +45,25 @@ class NoteDetailPageScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Text(note.content),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(note.content),
+            SizedBox(height: 20),
+            Wrap(
+              children: note.tags.map((tag) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ChoiceChip(
+                    label: Text(tag.name),
+                    selected: true,
+                    onSelected: null,
+                  ),
+                );
+              }).toList(),
+            ),
+          ],
+        ),
       ),
     );
   }
