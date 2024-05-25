@@ -82,7 +82,7 @@ class _SplashScreenState extends State<SplashScreen>
                     children: [
                       Flexible(
                         child: Text(
-                          'COCUS CHANLLENGE',
+                          'COCUS CHALLENGE',
                           style: TextStyle(
                             fontSize: 60,
                             fontWeight: FontWeight.bold,
