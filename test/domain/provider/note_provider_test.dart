@@ -19,7 +19,14 @@ void main() {
   });
 
   group('fetchNotes', () {
-    final notes = [Note(id: 1, title: 'Test', content: 'Content')];
+    final notes = [
+      Note(
+        id: 1,
+        title: 'Test',
+        content: 'Content',
+        createdDate: DateTime.now(),
+      )
+    ];
 
     test('Should fetch notes from the API', () async {
       when(mockNotesApiService.getNotes()).thenAnswer((_) async => notes);
@@ -48,6 +55,7 @@ void main() {
       id: 1,
       title: 'Test',
       content: 'Content',
+      createdDate: DateTime.now(),
     );
 
     test('Should add note using the API', () async {
@@ -75,11 +83,13 @@ void main() {
       id: 1,
       title: 'Old Test',
       content: 'Old Content',
+      createdDate: DateTime.now(),
     );
     final newNote = Note(
       id: 1,
       title: 'New Test',
       content: 'New Content',
+      createdDate: DateTime.now(),
     );
 
     setUp(() {
@@ -112,6 +122,7 @@ void main() {
       id: 1,
       title: 'Test',
       content: 'Content',
+      createdDate: DateTime.now(),
     );
 
     setUp(() {

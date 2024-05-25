@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:notes_web_app/src/domain/model/note.dart';
 import 'package:notes_web_app/src/domain/provider/note_provider.dart';
+import 'package:notes_web_app/src/screen/note_list_page_screen/components/dismissible_card_item.dart';
 import 'package:notes_web_app/src/screen/note_list_page_screen/components/note_detail_page_screen.dart';
 import 'package:notes_web_app/src/screen/note_list_page_screen/components/note_edit_page_screen.dart';
 import 'package:provider/provider.dart';
@@ -53,7 +55,7 @@ class _NoteListScreenState extends State<NoteListScreen> {
             ],
           ),
           IconButton(
-            icon: Icon(Icons.search),
+            icon: const Icon(Icons.search),
             onPressed: () {
               showSearch(
                 context: context,
@@ -74,8 +76,7 @@ class _NoteListScreenState extends State<NoteListScreen> {
               itemCount: noteProvider.notes.length,
               itemBuilder: (context, index) {
                 final note = noteProvider.notes[index];
-                return ListTile(
-                  title: Text(note.title),
+                return InkWell(
                   onTap: () {
                     Navigator.push(
                       context,
@@ -84,6 +85,17 @@ class _NoteListScreenState extends State<NoteListScreen> {
                       ),
                     );
                   },
+                  child: DismissibleCard(
+                    item: note,
+                    onDismissed: () {
+                      _showDeleteConfirmationDialog(
+                        note,
+                        () {
+                          noteProvider.delete(note);
+                        },
+                      );
+                    },
+                  ),
                 );
               },
             );
@@ -91,16 +103,62 @@ class _NoteListScreenState extends State<NoteListScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
         onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => NoteEditPageScreen(),
+              builder: (context) => const NoteEditPageScreen(),
             ),
           );
         },
       ),
+    );
+  }
+
+  Future<void> _showDeleteConfirmationDialog(
+    Note item,
+    VoidCallback onConfirmed,
+  ) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirm Delete'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Are you sure you want to delete ${item.title}?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                    builder: (_) => const NoteListScreen(),
+                  ),
+                  (route) => false,
+                );
+              },
+            ),
+            TextButton(
+              child: const Text('Delete'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                onConfirmed();
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("${item.title} deleted")),
+                );
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

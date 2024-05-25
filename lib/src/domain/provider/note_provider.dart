@@ -10,7 +10,7 @@ class NoteProvider with ChangeNotifier {
   List<Tag> _tags = [];
   bool _isLoading = false;
   final NotesApiService _apiService;
-  String _sortBy = 'createdDate';
+  String _sortBy = 'title';
 
   NoteProvider({required NotesApiService apiService})
       : _apiService = apiService {
@@ -23,7 +23,7 @@ class NoteProvider with ChangeNotifier {
     sortedNotes.sort((a, b) {
       switch (_sortBy) {
         case 'title':
-          return b.title.compareTo(a.title);
+          return a.title.compareTo(b.title);
         case 'createdDate':
           return b.createdDate!.compareTo(a.createdDate!);
         case 'version':

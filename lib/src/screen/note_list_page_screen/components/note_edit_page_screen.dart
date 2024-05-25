@@ -73,7 +73,7 @@ class _NoteEditPageScreen extends State<NoteEditPageScreen> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 final noteProvider =
                     Provider.of<NoteProvider>(context, listen: false);
                 Note note = Note(
@@ -83,11 +83,11 @@ class _NoteEditPageScreen extends State<NoteEditPageScreen> {
                   createdDate: DateTime.now(),
                 );
                 if (widget.note == null) {
-                  noteProvider.add(note);
+                  await noteProvider.add(note);
                 } else {
                   note.id = widget.note!.id ?? noteProvider.notes.length;
                   note.version = widget.note!.version + 1;
-                  noteProvider.update(widget.note!, note);
+                  await noteProvider.update(widget.note!, note);
                 }
                 Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(
