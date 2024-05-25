@@ -25,13 +25,8 @@ class NoteProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     try {
-      final response = await _apiService.getNotes();
-      log('Fetched response: $response'); // Debug logging
-
-      _notes = response;
-      log('Parsed notes: $notes'); // Debug logging
-
-      _notes = notes;
+      final responseNotes = await _apiService.getNotes();
+      _notes = responseNotes;
     } catch (error) {
       log('Error fetching notes: $error');
     } finally {
@@ -42,7 +37,8 @@ class NoteProvider with ChangeNotifier {
 
   Future<void> fetchTags() async {
     try {
-      _tags = await _apiService.getTags();
+      final responseTags = await _apiService.getTags();
+      _tags = responseTags;
     } catch (error) {
       log('Error fetching tags: $error');
     }

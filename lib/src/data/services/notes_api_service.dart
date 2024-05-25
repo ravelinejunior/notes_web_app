@@ -49,9 +49,8 @@ class NotesApiService {
   }
 
   Future<void> updateNote(int id, Note note) async {
-    final client = http.Client();
     try {
-      final response = await client.put(
+      final response = await http.put(
         Uri.parse('$baseUrl/$id'),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode(note.toJson()),
@@ -62,8 +61,6 @@ class NotesApiService {
       }
     } catch (e) {
       log('Error updating note: $e');
-    } finally {
-      client.close();
     }
   }
 
@@ -103,8 +100,7 @@ class NotesApiService {
     required int noteId,
     required List<Tag> tags,
   }) async {
-    final List<int> tagIds =
-        tags.map((tag) => tag.id).toList(); // Assuming Tag has an 'id' property
+    final List<int> tagIds = tags.map((tag) => tag.id).toList();
     final response = await http.post(
       Uri.parse('$baseUrl/$noteId/tags'),
       headers: <String, String>{
