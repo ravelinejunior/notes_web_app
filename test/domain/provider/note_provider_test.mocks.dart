@@ -8,6 +8,7 @@ import 'dart:async' as _i4;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:notes_web_app/src/data/services/notes_api_service.dart' as _i3;
 import 'package:notes_web_app/src/domain/model/note.dart' as _i2;
+import 'package:notes_web_app/src/domain/model/tag.dart' as _i5;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -95,6 +96,53 @@ class MockNotesApiService extends _i1.Mock implements _i3.NotesApiService {
   _i4.Future<void> deleteNote(int? id) => (super.noSuchMethod(
         Invocation.method(
           #deleteNote,
+          [id],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<List<_i5.Tag>> getTags() => (super.noSuchMethod(
+        Invocation.method(
+          #getTags,
+          [],
+        ),
+        returnValue: _i4.Future<List<_i5.Tag>>.value(<_i5.Tag>[]),
+      ) as _i4.Future<List<_i5.Tag>>);
+
+  @override
+  _i4.Future<void> addTag(_i5.Tag? tag) => (super.noSuchMethod(
+        Invocation.method(
+          #addTag,
+          [tag],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<void> associateTagsWithNote({
+    required int? noteId,
+    required List<_i5.Tag>? tags,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #associateTagsWithNote,
+          [],
+          {
+            #noteId: noteId,
+            #tags: tags,
+          },
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<void> deleteTag(int? id) => (super.noSuchMethod(
+        Invocation.method(
+          #deleteTag,
           [id],
         ),
         returnValue: _i4.Future<void>.value(),
