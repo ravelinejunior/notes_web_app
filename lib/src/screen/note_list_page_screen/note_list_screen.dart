@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:notes_web_app/src/domain/model/note.dart';
 import 'package:notes_web_app/src/domain/provider/note_provider.dart';
 import 'package:notes_web_app/src/screen/note_list_page_screen/components/dismissible_card_item.dart';
-import 'package:notes_web_app/src/screen/note_list_page_screen/components/note_detail_page_screen.dart';
-import 'package:notes_web_app/src/screen/note_list_page_screen/components/note_edit_page_screen.dart';
+import 'package:notes_web_app/src/screen/notes_detail_screen/note_detail_page_screen.dart';
+import 'package:notes_web_app/src/screen/add_edit_note_screen/note_edit_page_screen.dart';
 import 'package:provider/provider.dart';
 
 class MyWidget extends StatefulWidget {

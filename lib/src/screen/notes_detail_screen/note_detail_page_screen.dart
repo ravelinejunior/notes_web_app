@@ -4,7 +4,7 @@ import 'package:notes_web_app/src/domain/provider/note_provider.dart';
 import 'package:notes_web_app/src/utils/pdf_helper.dart';
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
-import 'note_edit_page_screen.dart';
+import '../add_edit_note_screen/note_edit_page_screen.dart';
 
 class NoteDetailPageScreen extends StatelessWidget {
   final Note note;
@@ -18,7 +18,7 @@ class NoteDetailPageScreen extends StatelessWidget {
         title: Text(note.title),
         actions: [
           IconButton(
-            icon: Icon(Icons.edit),
+            icon: const Icon(Icons.edit),
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -28,14 +28,14 @@ class NoteDetailPageScreen extends StatelessWidget {
             },
           ),
           IconButton(
-            icon: Icon(Icons.delete),
+            icon: const Icon(Icons.delete),
             onPressed: () {
               Provider.of<NoteProvider>(context, listen: false).delete(note);
               Navigator.of(context).pop();
             },
           ),
           IconButton(
-            icon: Icon(Icons.print),
+            icon: const Icon(Icons.print),
             onPressed: () async {
               final pdfData = await generateSinglePdf(note);
               await Printing.layoutPdf(onLayout: (format) => pdfData);
@@ -49,7 +49,7 @@ class NoteDetailPageScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(note.content),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Wrap(
               children: note.tags.map((tag) {
                 return Padding(
