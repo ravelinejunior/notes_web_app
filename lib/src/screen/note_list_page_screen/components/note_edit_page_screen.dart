@@ -30,7 +30,7 @@ class _NoteEditPageScreen extends State<NoteEditPageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final tags = Provider.of<NoteProvider>(context).tags;
+    List<Tag> tags = Provider.of<NoteProvider>(context).tags;
 
     return Scaffold(
       appBar: AppBar(
@@ -76,14 +76,17 @@ class _NoteEditPageScreen extends State<NoteEditPageScreen> {
               onPressed: () {
                 final noteProvider =
                     Provider.of<NoteProvider>(context, listen: false);
-                final note = Note(
+                Note note = Note(
                   title: _titleController.text,
                   content: _contentController.text,
                   tags: _selectedTags,
+                  createdDate: DateTime.now(),
                 );
                 if (widget.note == null) {
                   noteProvider.add(note);
                 } else {
+                  note.id = widget.note!.id ?? noteProvider.notes.length;
+                  note.version = widget.note!.version + 1;
                   noteProvider.update(widget.note!, note);
                 }
                 Navigator.of(context).pushAndRemoveUntil(

@@ -13,7 +13,14 @@ app.use(bodyParser.json());
 const db = new sqlite3.Database(':memory:');
 
 db.serialize(() => {
-  db.run("CREATE TABLE notes (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, content TEXT, iv TEXT)");
+  db.run(`CREATE TABLE notes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT,
+    content TEXT,
+    iv TEXT,
+    createdDate TEXT,
+    version INTEGER DEFAULT 1
+  )`);
   db.run("CREATE TABLE tags (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)");
   db.run("CREATE TABLE note_tags (note_id INTEGER, tag_id INTEGER, FOREIGN KEY(note_id) REFERENCES notes(id), FOREIGN KEY(tag_id) REFERENCES tags(id))");
 
@@ -25,14 +32,14 @@ db.serialize(() => {
   stmt.finalize();
 });
 
-// Get all notes with tags
+// Get all notes
 app.get('/notes', (_, res) => {
   const query = `
-  SELECT n.id, n.title, n.content, n.iv, GROUP_CONCAT(t.name) as tags 
-  FROM notes n 
-  LEFT JOIN note_tags nt ON n.id = nt.note_id 
-  LEFT JOIN tags t ON nt.tag_id = t.id 
-  GROUP BY n.id  
+    SELECT n.id, n.title, n.content, n.iv, n.createdDate, n.version, GROUP_CONCAT(t.name) as tags 
+    FROM notes n 
+    LEFT JOIN note_tags nt ON n.id = nt.note_id 
+    LEFT JOIN tags t ON nt.tag_id = t.id 
+    GROUP BY n.id
   `;
 
   db.all(query, (err, rows) => {
@@ -44,6 +51,8 @@ app.get('/notes', (_, res) => {
         id: row.id,
         title: row.title,
         content: decrypt({ iv: row.iv, encryptedData: row.content }),
+        createdDate: row.createdDate,
+        version: row.version,
         tags: row.tags ? row.tags.split(',') : []
       }));
       res.json(decryptedRows);
@@ -62,7 +71,9 @@ app.get('/notes/:id', (req, res) => {
       res.json({
         id: row.id,
         title: row.title,
-        content: decrypt({ iv: row.iv, encryptedData: row.content })
+        content: decrypt({ iv: row.iv, encryptedData: row.content }),
+        createdDate: row.createdDate,
+        version: row.version
       });
     } else {
       res.status(404).send("Note not found");
@@ -74,13 +85,14 @@ app.get('/notes/:id', (req, res) => {
 app.post('/notes', (req, res) => {
   const { title, content } = req.body;
   const encrypted = encrypt(content);
-  const stmt = db.prepare("INSERT INTO notes (title, content, iv) VALUES (?, ?, ?)");
-  stmt.run([title, encrypted.encryptedData, encrypted.iv], function (err) {
+  const createdDate = new Date().toISOString();
+  const stmt = db.prepare("INSERT INTO notes (title, content, iv, createdDate,  version) VALUES (?, ?, ?, ?, ?)");
+  stmt.run([title, encrypted.encryptedData, encrypted.iv, createdDate, 1], function (err) {
     if (err) {
       console.error('Error adding note:', err.message);
       res.status(500).send(err.message);
     } else {
-      res.status(201).json({ id: this.lastID, title, content });
+      res.status(201).json({ id: this.lastID, title, content, createdDate, version: 1 });
     }
   });
 });
@@ -90,18 +102,31 @@ app.put('/notes/:id', (req, res) => {
   const { title, content } = req.body;
   const id = req.params.id;
   const encrypted = encrypt(content);
-  const stmt = db.prepare("UPDATE notes SET title = ?, content = ?, iv = ? WHERE id = ?");
-  stmt.run([title, encrypted.encryptedData, encrypted.iv, id], function (err) {
+  const createdDate = new Date().toISOString();
+  db.get("SELECT version FROM notes WHERE id = ?", [id], (err, row) => {
     if (err) {
-      console.error(`Error updating note with ID ${id}:`, err.message);
+      console.error(`Error fetching note version with ID ${id}:`, err.message);
       res.status(500).send(err.message);
-    } else if (this.changes === 0) {
-      res.status(404).send("Note not found");
+    } else if (row) {
+      const newVersion = row.version + 1;
+      const stmt = db.prepare("UPDATE notes SET title = ?, content = ?, iv = ?, createdDate = ?, version = ? WHERE id = ?");
+      stmt.run([title, encrypted.encryptedData, encrypted.iv, createdDate, newVersion, id], function (err) {
+        if (err) {
+          console.error(`Error updating note with ID ${id}:`, err.message);
+          res.status(500).send(err.message);
+        } else if (this.changes === 0) {
+          res.status(404).send("Note not found");
+        } else {
+          res.json({ id, title, content, createdDate, version: newVersion });
+        }
+      });
     } else {
-      res.json({ id, title, content });
+      res.status(404).send("Note not found");
     }
   });
 });
+
+
 
 // Delete a note
 app.delete('/notes/:id', (req, res) => {

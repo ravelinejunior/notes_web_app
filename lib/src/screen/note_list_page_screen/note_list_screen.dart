@@ -26,14 +26,32 @@ class NoteListScreen extends StatefulWidget {
 }
 
 class _NoteListScreenState extends State<NoteListScreen> {
-  final String _searchQuery = '';
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Notes'),
+        title: const Text('Notes'),
         actions: [
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              Provider.of<NoteProvider>(context, listen: false)
+                  .setSortBy(value);
+            },
+            itemBuilder: (context) => const [
+              PopupMenuItem(
+                value: 'title',
+                child: Text('Sort by Title'),
+              ),
+              PopupMenuItem(
+                value: 'createdDate',
+                child: Text('Sort by Created Date'),
+              ),
+              PopupMenuItem(
+                value: 'version',
+                child: Text('Sort by Version'),
+              ),
+            ],
+          ),
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () {
@@ -48,28 +66,16 @@ class _NoteListScreenState extends State<NoteListScreen> {
       body: Consumer<NoteProvider>(
         builder: (context, noteProvider, child) {
           if (noteProvider.isLoading) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (noteProvider.notes.isEmpty) {
-            return Center(child: Text('No notes available.'));
+            return const Center(child: Text('No notes available.'));
           } else {
-            final notes = noteProvider.notes
-                .where((note) =>
-                    note.title
-                        .toLowerCase()
-                        .contains(_searchQuery.toLowerCase()) ||
-                    note.content
-                        .toLowerCase()
-                        .contains(_searchQuery.toLowerCase()))
-                .toList();
             return ListView.builder(
-              itemCount: notes.length,
+              itemCount: noteProvider.notes.length,
               itemBuilder: (context, index) {
-                final note = notes[index];
+                final note = noteProvider.notes[index];
                 return ListTile(
-                  leading: Icon(Icons.book),
                   title: Text(note.title),
-                  subtitle: Text(note.content),
-                  contentPadding: const EdgeInsets.all(8),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -115,7 +121,7 @@ class NoteSearchDelegate extends SearchDelegate {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.close),
+      icon: const Icon(Icons.close),
       onPressed: () {
         close(context, null);
       },
@@ -136,7 +142,7 @@ class NoteSearchDelegate extends SearchDelegate {
           itemBuilder: (context, index) {
             final note = results[index];
             return ListTile(
-              leading: Icon(Icons.book),
+              leading: const Icon(Icons.book),
               title: Text(note.title),
               subtitle: Text(note.content),
               contentPadding: const EdgeInsets.all(8),
@@ -169,7 +175,7 @@ class NoteSearchDelegate extends SearchDelegate {
           itemBuilder: (context, index) {
             final note = suggestions[index];
             return ListTile(
-              leading: Icon(Icons.book),
+              leading: const Icon(Icons.book),
               title: Text(note.title),
               subtitle: Text(note.content),
               contentPadding: const EdgeInsets.all(8),

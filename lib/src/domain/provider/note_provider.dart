@@ -10,6 +10,7 @@ class NoteProvider with ChangeNotifier {
   List<Tag> _tags = [];
   bool _isLoading = false;
   final NotesApiService _apiService;
+  String _sortBy = 'createdDate';
 
   NoteProvider({required NotesApiService apiService})
       : _apiService = apiService {
@@ -17,7 +18,28 @@ class NoteProvider with ChangeNotifier {
     fetchTags();
   }
 
-  List<Note> get notes => _notes;
+  List<Note> get notes {
+    List<Note> sortedNotes = List.from(_notes);
+    sortedNotes.sort((a, b) {
+      switch (_sortBy) {
+        case 'title':
+          return b.title.compareTo(a.title);
+        case 'createdDate':
+          return b.createdDate!.compareTo(a.createdDate!);
+        case 'version':
+          return b.version.compareTo(a.version);
+        default:
+          return 0;
+      }
+    });
+    return sortedNotes;
+  }
+
+  void setSortBy(String sortBy) {
+    _sortBy = sortBy;
+    notifyListeners();
+  }
+
   List<Tag> get tags => _tags;
   bool get isLoading => _isLoading;
 
