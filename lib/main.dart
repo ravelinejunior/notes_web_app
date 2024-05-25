@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:notes_web_app/src/data/services/notes_api_service.dart';
 import 'package:notes_web_app/src/domain/provider/note_provider.dart';
 import 'package:notes_web_app/src/screen/note_list_page_screen/note_list_screen.dart';
+import 'package:notes_web_app/src/screen/splash_screen/splash_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const NoteListScreen(),
+        home: const SplashScreen(),
       ),
     );
   }

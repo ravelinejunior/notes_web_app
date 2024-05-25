@@ -23,7 +23,7 @@ class NoteProvider with ChangeNotifier {
     sortedNotes.sort((a, b) {
       switch (_sortBy) {
         case 'title':
-          return a.title.compareTo(b.title);
+          return a.title.toLowerCase().compareTo(b.title.toLowerCase());
         case 'createdDate':
           return b.createdDate!.compareTo(a.createdDate!);
         case 'version':
