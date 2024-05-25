@@ -9,18 +9,19 @@ Future<Uint8List> generateSinglePdf(Note note) async {
 
   pdf.addPage(
     pw.Page(
-      pageFormat: PdfPageFormat.standard,
+      pageFormat: PdfPageFormat.a3,
       build: (pw.Context context) {
         return pw.Padding(
           padding: const pw.EdgeInsets.all(10),
           child: pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.stretch,
             children: [
               pw.Text(
                 note.title,
                 style:
                     pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold),
               ),
-              pw.SizedBox(height: 10),
+              pw.SizedBox(height: 8),
               pw.Text(note.content),
             ],
           ),

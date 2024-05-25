@@ -26,9 +26,7 @@ class DismissibleCard extends StatelessWidget {
                       const Text('Are you sure you want to delete this item?'),
                   actions: [
                     TextButton(
-                      onPressed: () => Navigator.of(context).pop(false
-                          // ignore: avoid_print
-                          ),
+                      onPressed: () => Navigator.of(context).pop(false),
                       child: const Text('No'),
                     ),
                     TextButton(

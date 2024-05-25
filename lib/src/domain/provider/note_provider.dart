@@ -27,7 +27,7 @@ class NoteProvider with ChangeNotifier {
         case 'createdDate':
           return b.createdDate!.compareTo(a.createdDate!);
         case 'version':
-          return a.version.compareTo(b.version);
+          return b.version.compareTo(a.version);
         default:
           return 0;
       }

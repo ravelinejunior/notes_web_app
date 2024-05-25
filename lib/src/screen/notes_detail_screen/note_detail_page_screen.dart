@@ -56,43 +56,46 @@ class _NoteDetailPageScreenState extends State<NoteDetailPageScreen> {
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Center(
-            child: Card(
-              elevation: 8,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      AnimatedContainer(
-                        duration: const Duration(seconds: 1),
-                        curve: Curves.easeInOut,
-                        child: Text(
-                          widget.note.content,
-                          style: const TextStyle(fontSize: 18),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      AnimatedContainer(
-                        duration: const Duration(seconds: 1),
-                        curve: Curves.easeInOut,
-                        child: Wrap(
-                          children: widget.note.tags.map((tag) {
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Chip(
-                                label: Text(tag.name),
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                    ],
-                  ),
+          child: Card(
+            elevation: 12,
+            margin: const EdgeInsets.all(20),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      widget.note.title,
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      widget.note.content,
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                    const SizedBox(height: 4),
+                    Wrap(
+                      children: widget.note.tags.map((tag) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Chip(
+                            label: Text(
+                              tag.name,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ],
                 ),
               ),
             ),
