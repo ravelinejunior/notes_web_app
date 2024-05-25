@@ -23,6 +23,7 @@ class _NoteEditPageScreen extends State<NoteEditPageScreen> {
     if (widget.note != null) {
       _titleController.text = widget.note!.title;
       _contentController.text = widget.note!.content;
+      _selectedTags = widget.note!.tags;
     }
     super.initState();
   }

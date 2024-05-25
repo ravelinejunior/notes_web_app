@@ -37,7 +37,7 @@ app.get('/notes', (_, res) => {
 
   db.all(query, (err, rows) => {
     if (err) {
-      console.error('Error fetching notes:', err.message);  // Detailed logging
+      console.error('Error fetching notes:', err.message);
       res.status(500).send(err.message);
     } else {
       const decryptedRows = rows.map(row => ({
@@ -56,7 +56,7 @@ app.get('/notes/:id', (req, res) => {
   const id = req.params.id;
   db.get("SELECT * FROM notes WHERE id = ?", [id], (err, row) => {
     if (err) {
-      console.error(`Error fetching note with ID ${id}:`, err.message);  // Detailed logging
+      console.error(`Error fetching note with ID ${id}:`, err.message);
       res.status(500).send(err.message);
     } else if (row) {
       res.json({
@@ -77,7 +77,7 @@ app.post('/notes', (req, res) => {
   const stmt = db.prepare("INSERT INTO notes (title, content, iv) VALUES (?, ?, ?)");
   stmt.run([title, encrypted.encryptedData, encrypted.iv], function (err) {
     if (err) {
-      console.error('Error adding note:', err.message);  // Detailed logging
+      console.error('Error adding note:', err.message);
       res.status(500).send(err.message);
     } else {
       res.status(201).json({ id: this.lastID, title, content });
@@ -93,7 +93,7 @@ app.put('/notes/:id', (req, res) => {
   const stmt = db.prepare("UPDATE notes SET title = ?, content = ?, iv = ? WHERE id = ?");
   stmt.run([title, encrypted.encryptedData, encrypted.iv, id], function (err) {
     if (err) {
-      console.error(`Error updating note with ID ${id}:`, err.message);  // Detailed logging
+      console.error(`Error updating note with ID ${id}:`, err.message);
       res.status(500).send(err.message);
     } else if (this.changes === 0) {
       res.status(404).send("Note not found");
@@ -109,7 +109,7 @@ app.delete('/notes/:id', (req, res) => {
   const stmt = db.prepare("DELETE FROM notes WHERE id = ?");
   stmt.run([id], function (err) {
     if (err) {
-      console.error(`Error deleting note with ID ${id}:`, err.message);  // Detailed logging
+      console.error(`Error deleting note with ID ${id}:`, err.message);
       res.status(500).send(err.message);
     } else if (this.changes === 0) {
       res.status(404).send("Note not found");
@@ -123,7 +123,7 @@ app.delete('/notes/:id', (req, res) => {
 app.get('/tags', (req, res) => {
   db.all("SELECT * FROM tags", (err, rows) => {
     if (err) {
-      console.error('Error fetching tags:', err.message);  // Detailed logging
+      console.error('Error fetching tags:', err.message); 
       res.status(500).send(err.message);
     } else {
       res.json(rows);
@@ -137,7 +137,7 @@ app.post('/tags', (req, res) => {
   const stmt = db.prepare("INSERT INTO tags (name) VALUES (?)");
   stmt.run([name], function (err) {
     if (err) {
-      console.error('Error adding tag:', err.message);  // Detailed logging
+      console.error('Error adding tag:', err.message);  
       res.status(500).send(err.message);
     } else {
       res.status(201).json({ id: this.lastID, name });
@@ -148,19 +148,19 @@ app.post('/tags', (req, res) => {
 // Associate tags with a note
 app.post('/notes/:id/tags', (req, res) => {
   const noteId = req.params.id;
-  const { tagIds } = req.body; // Assuming the client sends an array of tag IDs
+  const { tagIds } = req.body; 
   const stmt = db.prepare("INSERT INTO note_tags (note_id, tag_id) VALUES (?, ?)");
   tagIds.forEach(tagId => {
     stmt.run([noteId, tagId], function (err) {
       if (err) {
-        console.error(`Error associating tag with note ID ${noteId}:`, err.message);  // Detailed logging
+        console.error(`Error associating tag with note ID ${noteId}:`, err.message);
         res.status(500).send(err.message);
       } else {
         console.log(`Tag with ID ${tagId} associated with note ID ${noteId}`);
       }
     });
   });
-  res.status(201).json({ noteId, tagIds }); // Respond after all tags are associated
+  res.status(201).json({ noteId, tagIds });
 });
 
 app.listen(port, () => {
