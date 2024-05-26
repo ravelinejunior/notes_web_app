@@ -77,15 +77,15 @@ class _NoteListScreenState extends State<NoteListScreen> {
             return Center(
               child: Column(
                 children: [
-                  const SizedBox(height: 16),
-                  const Text(
+                  SizedBox(height: 16),
+                  Text(
                     'No notes available.',
                     style: TextStyle(
                       fontSize: 40,
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  const Text(
+                  SizedBox(height: 16),
+                  Text(
                     'Add a new note to get started.',
                     style: TextStyle(
                       fontSize: 20,
