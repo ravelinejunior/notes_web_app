@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:notes_web_app/src/domain/model/note.dart';
 import 'package:notes_web_app/src/domain/provider/note_provider.dart';
 import 'package:notes_web_app/src/screen/note_list_page_screen/components/dismissible_card_item.dart';
@@ -33,6 +34,7 @@ class _NoteListScreenState extends State<NoteListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Notes'),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         actions: [
           PopupMenuButton<String>(
             onSelected: (value) {
@@ -70,7 +72,37 @@ class _NoteListScreenState extends State<NoteListScreen> {
           if (noteProvider.isLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (noteProvider.notes.isEmpty) {
-            return const Center(child: Text('No notes available.'));
+            final screenWidth = MediaQuery.of(context).size.width;
+            final screenHeigth = MediaQuery.of(context).size.height;
+            return Center(
+              child: Column(
+                children: [
+                  const SizedBox(height: 16),
+                  const Text(
+                    'No notes available.',
+                    style: TextStyle(
+                      fontSize: 40,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Add a new note to get started.',
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  LottieBuilder.asset(
+                    "assets/animations/empty.json",
+                    alignment: Alignment.center,
+                    fit: BoxFit.cover,
+                    width: screenWidth / 3,
+                    height: screenHeigth / 3,
+                    repeat: true,
+                  ),
+                ],
+              ),
+            );
           } else {
             return ListView.builder(
               itemCount: noteProvider.notes.length,
@@ -184,7 +216,7 @@ class NoteSearchDelegate extends SearchDelegate {
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
-        icon: Icon(Icons.clear),
+        icon: const Icon(Icons.clear),
         onPressed: () {
           query = '';
         },
